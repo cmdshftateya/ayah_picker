@@ -6,7 +6,7 @@ def random_ayah_picker():
 
     official_surahs_and_ayahs = []
 
-    with open("/Users/abdulrahmanateya/Downloads/SurahInfoSheet1.csv", "r") as surahinfo:
+    with open("SurahInfoSheet1.csv", "r") as surahinfo:
         # print(surahinfo.readlines())
         for x in surahinfo.readlines():
             # print(x)
