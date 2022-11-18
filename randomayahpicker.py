@@ -19,7 +19,7 @@ def random_ayah_picker():
     
     i = 0
     while i < ayahs_requested:
-        surah = random.choice(official_surahs_and_ayahs)
+        surah = random.choice(official_surahs_and_ayahs[1:])
         print(surah)
         i += 1
         surah_number = surah[0]
