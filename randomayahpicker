@@ -3,7 +3,8 @@ import random
 import webbrowser
 import requests
 import datetime
-from googletrans import Translator
+import convert_numbers
+from argparse import ArgumentParser
 
 
 def get_arabic(surah_number, ayah_number):
@@ -138,16 +139,22 @@ def random_ayah_picker():
         i += 1
 
 def main():
-    request = input('''Enter 'A' to print ayahs or 'B' to get random ayahs: ''')
-    if request.lower() == 'a':
-        surah_number = input('Input the surah number you would like: ')
-        ayah_number = input('Input the ayah number(s) you would like: ')
-        # TODO add functionality for several ayahs
+    picker = ArgumentParser()
+    picker.add_argument("-p", "--printer", action="store_true", help="Enable ayah printer functionality.")
+    picker.add_argument("-r", "--random", action="store_true", help="Enable random ayah picker functionality.")
+    picker.add_argument("--surah", default="")
+    picker.add_argument("--ayah", default="")
 
-        ayah_printer(surah_number, ayah_number)
+    args = picker.parse_args()
     
-    if request.lower() == 'b':
+    if args.printer:
+        ayah_printer(args.surah, args.ayah)
+    
+    if args.random:
         random_ayah_picker()
+    
+    if not args.random and not args.printer:
+        print("You need to select either -p or -r (--printer or --random) to continue")
 
 if __name__ == '__main__':
     main()
