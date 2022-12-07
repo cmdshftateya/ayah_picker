@@ -36,9 +36,8 @@ def get_arabic(surah_number, ayah_number):
             # TODO fix this vvv
             # # we need the ayah number in arabic... so lets use translate
 
-            # translator = Translator()
-            # number = translator.translate(x, dest='ar')
-            ayahs_in_arabic += ayah['verses'][0]['text_uthmani'] + f"({x})"
+            number = convert_numbers.english_to_arabic(x)
+            ayahs_in_arabic += ayah['verses'][0]['text_uthmani'] + f"({number}) "
         return ayahs_in_arabic
 
 
