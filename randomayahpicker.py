@@ -1,8 +1,11 @@
 #! /usr/bin/env python3
+import random
+import webbrowser
+import requests
+import datetime
 
 def random_ayah_picker():
-    import random
-    import webbrowser
+    
 
     # create a data structure to put info that we will randomize from
     official_surahs_and_ayahs = []
@@ -34,12 +37,53 @@ def random_ayah_picker():
         surah = random.choice(official_surahs_and_ayahs)
         # print(surah)
         surah_number = surah[0]
+        print(surah_number)
         # pick a random ayah from the surah
         ayah_number = random.randint(1, int(surah[1]))
+        print(ayah_number)
 
         # open it in the default browser
-        print(f'http://quran.com/{surah_number}/{ayah_number}/')
-        webbrowser.open(f'http://quran.com/{surah_number}/{ayah_number}/', new=2)
+        # print(f'http://quran.com/{surah_number}/{ayah_number}/')
+        # webbrowser.open(f'http://quran.com/{surah_number}/{ayah_number}/', new=2)
+        
+        # build copy paste item
+        copypaste = ""
+
+        # get the date
+        now = datetime.datetime.now()
+        day = now.strftime("%d")
+        daymonth = now.strftime(f"%m/{day.lstrip('0')}")
+
+        # add it all to a string
+        first_line = "Ayah of the Day, " + daymonth + "\n\n"
+        arabic = get_arabic(surah_number, ayah_number) + "\n\n"
+        english = get_english(surah_number, ayah_number)
+        surah_name = surah_name_transliteration(surah_number)
+        name_line = "Surah " + surah_name + ", Ayah " + str(ayah_number) + "\n\n"
+        copypaste = first_line + name_line + arabic + english 
+        print(copypaste)
+
         i += 1
-    
+
+def get_arabic(surah_number, ayah_number):
+    # make api calls to get stuff
+    url = f'https://api.quran.com/api/v4/quran/verses/uthmani?verse_key={surah_number}%3A{ayah_number}'
+
+    response = requests.get(url)
+    x = response.json()
+    return x['verses'][0]['text_uthmani']
+
+def get_english(surah_number, ayah_number):
+    url = f'https://api.quran.com/api/v4/quran/translations/85?verse_key={surah_number}%3A{ayah_number}'
+
+    response = requests.get(url)
+    x = response.json()
+    return x['translations'][0]['text']
+
+def surah_name_transliteration(surah_number):
+    url = f'https://api.quran.com/api/v4/chapters/{surah_number}?language=en'
+
+    response = requests.get(url)
+    x = response.json()
+    return x['chapter']['name_simple']
 random_ayah_picker()
