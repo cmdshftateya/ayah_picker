@@ -13,7 +13,7 @@ The script takes an input of desired surah number and desired ayah number(s) and
 ## Usage
 Run the following prompt:
 ```
-python3 randomayahpicker
+python3 ayahpicker
 ```
 The arguments are as follows:
 - ```-r``` or ```--random``` enables the random ayah generation feature
