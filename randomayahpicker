@@ -8,12 +8,15 @@ from argparse import ArgumentParser
 
 
 def get_arabic(surah_number, ayah_number):
-    # make api calls to get stuff 
+    # use isdigit to find out if there is only one ayah selected from the surah
     if ayah_number.isdigit():
         url = f'https://api.quran.com/api/v4/quran/verses/uthmani?verse_key={surah_number}%3A{ayah_number}'
         response = requests.get(url)
         ayah = response.json()
+
+        # return the arabic text of that ayah
         return ayah['verses'][0]['text_uthmani']
+    # if it is not a single digit, then we have to work a lot harder
     else:
         # since users will input [Ayahs] [start_num]-[end_num], we can split on the hyphen to get a list of ayah numbers
         endcaps = ayah_number.split("-")
@@ -21,12 +24,19 @@ def get_arabic(surah_number, ayah_number):
         # so we need to get the ayah numbers in the middle for the api call
         start = int(endcaps[0])
         end = int(endcaps[1])
+
+        # initialize a list to add the ayah numbers to 
         ayah_numbers = [str(start)]
+
+        # loop through the list of ayah numbers
         for x in range(end - start):
+            # since we know the first ayah number, we can add to it so we can 
+            # continue the ayah numbers for the count of the above difference
             start += 1
             ayah_numbers.append(start)
         # now we have a list of the ayah numbers 
 
+        # initialize a string variable to add the arabic text to
         ayahs_in_arabic = ""
         for x in ayah_numbers:
             # get the ayah in arabic that we are iterating
@@ -34,9 +44,8 @@ def get_arabic(surah_number, ayah_number):
             response = requests.get(url)
             ayah = response.json()
 
-            # TODO fix this vvv
-            # # we need the ayah number in arabic... so lets use translate
-
+            # we want to add the ayah number in the middle of the arabic text, but we do not have it in arabic
+            # but we do know what ayah number it is. so we will use convert_numbers
             number = convert_numbers.english_to_arabic(x)
             ayahs_in_arabic += ayah['verses'][0]['text_uthmani'] + f"({number}) "
         return ayahs_in_arabic
@@ -48,6 +57,7 @@ def get_english(surah_number, ayah_number):
         response = requests.get(url)
         ayah = response.json()
         return ayah['translations'][0]['text']
+    # if you want to know whats going on here, its basically the same concept as above starting on line 19 with some omissions
     else:
         # since users will input [Ayahs] [start_num]-[end_num], we can split on the hyphen to get a list of ayah numbers
         endcaps = ayah_number.split("-")
@@ -67,7 +77,7 @@ def get_english(surah_number, ayah_number):
             url = f'https://api.quran.com/api/v4/quran/translations/85?verse_key={surah_number}%3A{x}'
             response = requests.get(url)
             ayah = response.json()
-            ayahs_in_english += ayah['translations'][0]['text']
+            ayahs_in_english += ayah['translations'][0]['text'] + " "
         return ayahs_in_english
 
 def surah_name_transliteration(surah_number):
