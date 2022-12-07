@@ -20,4 +20,5 @@ The arguments are as follows:
 - ```-p``` or ```--printer``` enables the ayah printing functionality
     - you must include one of the above for the function to run
 - ```--surah``` to input desired surah number
-- ```--ayah``` to input desired ayah number. Use a single number or (start_ayah)-(end_ayah). 
+- ```--ayah``` to input desired ayah number. Use a single number or (start_ayah)-(end_ayah).
+- ```--requests``` to specify how many random ayahs you want the script to open
