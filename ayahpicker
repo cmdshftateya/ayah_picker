@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-import random
 import webbrowser
 import requests
 import datetime
 import convert_numbers
 from argparse import ArgumentParser
-
 
 def get_arabic(surah_number, ayah_number):
     # use isdigit to find out if there is only one ayah selected from the surah
@@ -89,7 +87,6 @@ def surah_name_transliteration(surah_number):
 
 def open_browser(surah_number, ayah_number):
     # open it in the default browser
-    # print(f'http://quran.com/{surah_number}/{ayah_number}/')
     webbrowser.open(f'http://quran.com/{surah_number}/{ayah_number}/', new=2)   
 
 def ayah_printer(surah_number, ayah_number):
@@ -110,11 +107,9 @@ def ayah_printer(surah_number, ayah_number):
     copypaste = first_line + name_line + arabic + english 
     print(copypaste)
 
-def random_ayah_picker(request):
-    ayahs_requested = request
-    
+def random_ayah_picker(request):    
     i = 0
-    while i < ayahs_requested:
+    while i < request:
         url = f'https://api.quran.com/api/v4/verses/random?language=en&words=true'
         response = requests.get(url)
         ayah = response.json()
